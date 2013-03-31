@@ -16,7 +16,8 @@ CheckOut::CheckOut(string token):QObject()
 }
 
 // function to find customer of the corresponding token
-bool CheckOut::findCustomer(){
+bool CheckOut::findCustomer()
+{
     //connect to database
     DatabaseManager *dbm = DatabaseManager::Instance();
     //query to get customer information from residing customer
@@ -31,20 +32,21 @@ bool CheckOut::findCustomer(){
     bill = query.value(query.record().indexOf("Bill")).toFloat();
     rooms = query.value(query.record().indexOf("Rooms")).toString();
     //spliting catering orders and insert in list
-    cateringOrder = query.value(query.record().indexOf("Catering_Bill")).toString().split("OBJECT:DESCRIPTION:",QString::SkipEmptyParts);
+    cateringOrder = query.value(query.record().indexOf("Catering_Bill")).toString().split("OBJECT:",QString::SkipEmptyParts);
     return true;        //customer found
 
 }
 
 // function to generate bill as GUI
-void CheckOut::generateBill(){
+void CheckOut::generateBill()
+{
 
         QLabel *Name = new QLabel(QObject::tr("Name : ")+QString::fromStdString(CustomerName));
         QLabel *Rooms = new QLabel(QObject::tr("Room Numbers : ")+rooms);
         QTableWidget *Bill = new QTableWidget;
         QStringList header;
-        header<<"Order No"<<"Item Name"<<"Number Of Items"<<"Amount";   // adding coulmn name in header list
-        Bill->setColumnCount(4);
+        header<<"Order No"<<"Item Name"<<"Number Of Items"<<"Amount"<<"Date of Order";   // adding coulmn name in header list
+        Bill->setColumnCount(5);
         Bill->setShowGrid(false);
         Bill->setHorizontalHeaderLabels(header);
         Bill->setRowCount(cateringOrder.size());

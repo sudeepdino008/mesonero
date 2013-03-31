@@ -47,7 +47,7 @@ bool CateringServices::updateBill(const QString& tokenNumber, const QList<QPair<
 
     Q_FOREACH(pair, orderList)
     {
-        description = description + "OBJECT:"+pair.first+";" + QString::number(pair.second) + ";" + QString::number(orderBill);
+        description = description + "OBJECT:"+pair.first+";" + QString::number(pair.second) + ";" + QString::number(orderBill) + ";" + QDate::currentDate().toString(Qt::ISODate);
     }
 
     //update Catering Description

@@ -42,6 +42,7 @@ public:
     void managerAfterLoginPage();
     void occupancyPage();
     void thresholdPage();
+    void updateVisit_MonthCount();
 
 private slots:
     void addItem(const QString&);
@@ -56,6 +57,7 @@ private slots:
     void calculateBill();
     void showAverageOccupancy();
     void updateThresholdValue();
+    void updateDatabase();
 
 private:
     QTabWidget *managerLoginWidget;

@@ -24,6 +24,23 @@ MainWindow::MainWindow(QWidget *parent) :QMainWindow(parent)
     cateringServices = new CateringServices;   //A universal catering service object. Reinitailise for new use.
     manager = new Management;
 
+    updateVisit_MonthCount();          //update month count for token
+
+}
+
+void MainWindow::updateVisit_MonthCount()
+{   int i;
+    QSqlQuery query1("SELECT Last_Date FROM Management");
+    if(query1.next())
+        i = QDate::currentDate().month()-query1.value(0).toDate().month();
+
+
+    QSqlQuery query2("UPDATE All_Customer SET Visit_MonthCount=Visit_MonthCount + "+QString::number(i));
+}
+
+void MainWindow::updateDatabase()
+{
+    QSqlQuery query1("UPDATE Management SET Last_Date = '"+QDate::currentDate().toString(Qt::ISODate)+"'");
 }
 
 //add room dynamically on making reservation
@@ -39,8 +56,8 @@ void MainWindow::addRoom(const QString & number)
         for(int i=0;i<number.toInt();i++){
             roomDescriptionLabel[i] = new QLabel(tr("Room Description : "));
             typeOfRoom[i] = new QComboBox;
-            typeOfRoom[i]->addItem("AC");
             typeOfRoom[i]->addItem("Non-AC");
+            typeOfRoom[i]->addItem("AC");
             bedOfRoom[i] = new QComboBox;
             bedOfRoom[i]->addItem("Single");
             bedOfRoom[i]->addItem("Double");

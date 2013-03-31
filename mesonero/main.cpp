@@ -32,7 +32,7 @@ bool createConnection()
     }
 
 
-    QSqlQuery query1("CREATE TABLE `Management` ( Rates real, Average_Occupancy real,Current_Occupancy real,Threshold_Visit real)",dbm->db);
+    QSqlQuery query1("CREATE TABLE `Management` ( Rates real, Average_Occupancy real,Current_Occupancy real,Threshold_Visit real, Last_Date varchar(40))",dbm->db);
     if (query1.isActive())
     {
         for(i = 0; i<12; i++)
@@ -63,6 +63,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     if(!createConnection())
         return 1;
+    //QObject::connect(qApp, SIGNAL(aboutToQuit()), w, SLOT(updateDatabase()));
+    QObject::connect(&a, SIGNAL(aboutToQuit()), &w, SLOT(updateDatabase()));
     a.setApplicationName(QObject::tr("Mesonero"));
     w.resize(QSize(500, 500));
     w.show();

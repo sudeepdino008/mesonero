@@ -5,8 +5,6 @@ DatabaseManager::DatabaseManager()
 
    db = QSqlDatabase::addDatabase("QSQLITE");
    db.setDatabaseName("MESONERO.db");
-   db.setHostName("localhost");
-   qDebug()<<"opened";
 
 }
 

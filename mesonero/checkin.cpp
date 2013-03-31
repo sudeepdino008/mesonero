@@ -25,19 +25,20 @@ bool CheckIn::identifyReservation(){
     //update name as datamember of customer if exist
 
     name = query.value(query.record().indexOf("Name")).toString().toStdString();
-    QDate checkindate = QDate::fromString(query.value(query.record().indexOf("CheckIn_Date")).toString());
-    QDate checkoutdate = QDate::fromString(query.value(query.record().indexOf("Checkout_Date")).toString());
+    QDate checkindate = query.value(query.record().indexOf("CheckIn_Date")).toDate();
+    QDate checkoutdate = query.value(query.record().indexOf("Checkout_Date")).toDate();
     QMessageBox::information(0,QObject::tr("Check In"),"Name : "+QString::fromStdString(name)+" Alloted Rooms : "+query.value(query.record().indexOf("Rooms")).toString());
     QStringList rooms = query.value(query.record().indexOf("Rooms")).toString().split(";");
     QSqlQuery getrates_query("SELECT Rates FROM `Management`",dbm->db);
     float bill = 0,Rates[4];
     int i = 0;
-    while(getrates_query.next())
-        Rates[i++] = query.value(0).toFloat();
+    while(getrates_query.next() && i<4)
+        Rates[i++] = getrates_query.value(0).toFloat();
 
     i = 0;
     while(i<rooms.size())
-        bill += Rates[rooms.at(i++).toInt()/100]*(checkindate.toJulianDay()-checkoutdate.toJulianDay());
+        bill += Rates[rooms.at(i++).toInt()/100]*(checkoutdate.toJulianDay()-checkindate.toJulianDay());
+
 
     // query for updateing advance of the customer
     QSqlQuery update_query("UPDATE `Residing_Customer` SET Advance = "+QString::number(AdvancePaid)+" ,Bill = "+QString::number(bill)+" WHERE Customer_Token = '"+QString::fromStdString(CustomerToken)+"'",dbm->db);
